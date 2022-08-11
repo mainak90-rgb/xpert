@@ -54,6 +54,15 @@ class Lexer:
                 tokens.append(Token(TT_DIV, pos_start=self.pos))
                 self.advance()
 
+            elif self.current_char == TV_MOD:
+                tokens.append(Token(TT_MOD, pos_start=self.pos))
+                self.advance()
+
+            elif self.current_char == TV_POW:
+                tokens.append(Token(TT_POW, pos_start=self.pos))
+                print(tokens)
+                self.advance()
+
             elif self.current_char == TV_LPAREN:
                 tokens.append(Token(TT_LPAREN, pos_start=self.pos))
                 self.advance()

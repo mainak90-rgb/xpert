@@ -5,8 +5,8 @@ from tokens import *
 # NODES
 ###########################################
 
-# Number node class
 
+# Number node class
 
 class NumberNode:
     def __init__(self, token):
@@ -18,8 +18,8 @@ class NumberNode:
     def __repr__(self) -> str:
         return f'{self.tok}'
 
-# Binary operator node class
 
+# Binary operator node class
 
 class BinaryOpNode:
     def __init__(self, token, right, left) -> None:
@@ -71,20 +71,20 @@ class Parser:
         res = self.expr()
         if not res.error and self.current_tok.type != TT_EOF:
             return res.failure(InvalidSyntaxError(
-                "Expected '+', '-', '*' or '/'",
+                "Expected '+', '-', '*','/','^' or '%'",
                 self.current_tok.pos_start, self.current_tok.pos_end
             ))
         return res
 
     # Expression func
     def expr(self):
-        return self.binaryOp(self.term, (TT_PLUS, TT_MINUS))
+        return self.binaryOp(self.term, self.term, (TT_PLUS, TT_MINUS))
 
     # Term func
     def term(self):
-        return self.binaryOp(self.factor, (TT_MUL, TT_DIV))
+        return self.binaryOp(self.factor, self.factor, (TT_MUL, TT_DIV, TT_MOD))
 
-    # Factor func
+    #Factor func
     def factor(self):
         result = ParseResult()
         tok = self.current_tok
@@ -96,7 +96,18 @@ class Parser:
                 return result
             return result.success(UnaryOpNode(tok, factor))
 
-        elif tok.type in (TT_INT, TT_FLOAT):
+        return self.power()
+
+    # Power func
+    def power(self):
+        return self.binaryOp(self.block, self.factor, (TT_POW,))
+
+    # Block func
+    def block(self):
+        result = ParseResult()
+        tok = self.current_tok
+
+        if tok.type in (TT_INT, TT_FLOAT):
             result.register(self.advance())
             return result.success(NumberNode(tok))
 
@@ -111,21 +122,21 @@ class Parser:
             else:
                 return result.failure(InvalidSyntaxError("Expected ')'", self.current_tok.pos_start, self.current_tok.pos_end))
 
-        return result.failure(InvalidSyntaxError("Expected int or float", tok.pos_start, tok.pos_end))
+        return result.failure(InvalidSyntaxError("Expected int or float or '('", tok.pos_start, tok.pos_end))
 
     ####################################
 
     # Binary operation func
-    def binaryOp(self, func, tokens: tuple):
+    def binaryOp(self, func1, func2, tokens: tuple):
         result = ParseResult()
-        left = result.register(func())
+        left = result.register(func1())
         if result.error:
             return result
 
         while self.current_tok.type in tokens:
             tok = self.current_tok
             result.register(self.advance())
-            right = result.register(func())
+            right = result.register(func2())
             if result.error:
                 return result
             left = BinaryOpNode(tok, right, left)

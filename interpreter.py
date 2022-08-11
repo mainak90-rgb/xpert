@@ -68,6 +68,14 @@ class Number:
     def __repr__(self) -> str:
         return str(self.value)
 
+    def mod_by(self, other):
+        if isinstance(other, Number):
+            return Number(self.value % other.value).set_context(self.context), None
+
+    def pow_by(self, other):
+        if isinstance(other, Number):
+            return Number(self.value ** other.value).set_context(self.context), None
+
 #######################################
 # CONTEXT
 #######################################
@@ -117,6 +125,10 @@ class Interpreter:
             result, error = left.mul_by(right)
         elif node.tok.type == TT_DIV:
             result, error = left.div_by(right)
+        elif node.tok.type == TT_MOD:
+            result,error = left.mod_by(right)
+        elif node.tok.type == TT_POW:
+            result,error = left.pow_by(right)
 
         if error:
             return res.failure(error)

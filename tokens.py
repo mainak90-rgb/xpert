@@ -17,6 +17,8 @@ TT_PLUS     ='PLUS'
 TT_MINUS    ='MINUS'
 TT_MUL      ='MUL'
 TT_DIV      ='DIV'
+TT_POW      ='POW'
+TT_MOD      ='MOD'
 TT_INC      ='INC'  # ++
 TT_DEC      ='DEC'  # --
 TT_LPAREN   ='LPAREN'
@@ -32,6 +34,8 @@ TV_MUL      ='*'
 TV_DIV      ='/'
 TV_LPAREN   ='('
 TV_RAPREN   =')'
+TV_POW      ='^'
+TV_MOD      ='%'
 
 
 class Token:
