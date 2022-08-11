@@ -3,7 +3,7 @@ import xpert
 while True:
 
     # Get the program as text
-    text = input(">> ")
+    text = input("$$ ")
     if text == 'EXIT':
         break
 
