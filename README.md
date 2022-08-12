@@ -2,7 +2,7 @@
 
 A programming language written in python. I'm
 still working in this project. It is a interpreted 
-langiage for now but leter I want to change this to
+language for now but leter I want to change this to
 a compiled language.
 
 
