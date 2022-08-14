@@ -9,3 +9,4 @@ while True:
 
     # Run
     print(xpert.run(text, '<stdin>'))
+    
